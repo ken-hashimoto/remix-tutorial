@@ -82,6 +82,7 @@ export default function Contact() {
     </div>
   );
 }
+
 const Favorite: FunctionComponent<{
   contact: Pick<ContactRecord, "favorite">;
 }> = ({ contact }) => {
@@ -93,7 +94,7 @@ const Favorite: FunctionComponent<{
   return (
     <fetcher.Form method="post">
       <button
-        aria-label={favorite ? "お気に入りから削除" : "お気に入りに追加"}
+        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
         name="favorite"
         value={favorite ? "false" : "true"}
       >
