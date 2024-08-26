@@ -2,11 +2,23 @@ import {
   Form,
   Links,
   Meta,
+  Link,
+  Outlet,
   Scripts,
+  useLoaderData,
   ScrollRestoration,
 } from "@remix-run/react";
+import { json } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
+import appStylesHref from "./app.css?url";
+import { getContacts } from "./data";
+export const loader = async () => {
+  const contacts = await getContacts();
+  return json({ contacts });
+};
 
 export default function App() {
+  const { contacts } = useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -34,20 +46,40 @@ export default function App() {
             </Form>
           </div>
           <nav>
-            <ul>
-              <li>
-                <a href={`/contacts/1`}>Your Name</a>
-              </li>
-              <li>
-                <a href={`/contacts/2`}>Your Friend</a>
-              </li>
-            </ul>
+            {contacts.length ? (
+              <ul>
+                {contacts.map((contact) => (
+                  <li key={contact.id}>
+                    <Link to={`contacts/${contact.id}`}>
+                      {contact.first || contact.last ? (
+                        <>
+                          {contact.first} {contact.last}
+                        </>
+                      ) : (
+                        <i>名前なし</i>
+                      )}{" "}
+                      {contact.favorite ? <span>★</span> : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                <i>連絡先がありません</i>
+              </p>
+            )}
           </nav>
         </div>
-
+        <div id="detail">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
   );
 }
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: appStylesHref },
+];
