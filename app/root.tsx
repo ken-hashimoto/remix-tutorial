@@ -61,7 +61,7 @@ export default function App() {
                           {contact.first} {contact.last}
                         </>
                       ) : (
-                        <i>名前なし</i>
+                        <i>No Name</i>
                       )}{" "}
                       {contact.favorite ? <span>★</span> : null}
                     </Link>
@@ -70,7 +70,7 @@ export default function App() {
               </ul>
             ) : (
               <p>
-                <i>連絡先がありません</i>
+                <i>No contacts</i>
               </p>
             )}
           </nav>
